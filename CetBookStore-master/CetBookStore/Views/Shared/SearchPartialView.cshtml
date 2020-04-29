@@ -8,15 +8,43 @@
 
 <form asp-action="Search">
 
-
     <input asp-for="SearchText" class="form-control" />
 
-
 </form>
-
+<div class="form-group">
+    <label asp-for="CategoryId" class="control-label"></label>
+    <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId">
+        <option value=""> Tüm Kategoriler </option>
+    </select>
+</div>
 @if (Model?.Results != null)
 {
     <h3> Arama Sonuçları</h3>
+    <title> HtmlSelect Example </title>
+    <script runat="server">
+        void Button_Click (Object sender, EventArgs e)
+        {
+           Label1.Text = "Selected index: " + Select1.SelectedIndex.ToString()
+                         + ", value: " + Select1.Value;
+        }
+    </script>
+    <form id="form1" runat="server">
+
+        Fiyata gore sirala:
+
+        <select id="Select1" runat="server">
+            <option value="Text for Item 1" selected="selected"> siralama seciniz </option>
+            <option value="Text for Item 2"> artan</option>
+            <option value="Text for Item 3"> azalan </option>
+
+        </select>
+
+        <button onserverclick="Button_Click" runat="server" Text="Submit" />
+
+        <asp:Label id="Label1" runat="server" />
+    </form>
+
+
     <h5> @Model.Results.Count Adet Kitap bulundu. </h5>
 
     <div class="row">
@@ -52,6 +80,8 @@
                 </tr>
             </thead>
             <tbody>
+                if(Select1.Value=="1"){
+
                 @foreach (var item in Model.Results)
                 {
                     <tr>
@@ -85,8 +115,83 @@
                         </td>
                     </tr>
                 }
+                }
+                if(Select1.Value=="2"){
+
+                @foreach (var item in Model.Results.OrderBy(i => i.Price))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PageCount)
+                        </td>
+                        <td>
+                            @item.Authors
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @item.Price
+                            @*@Html.DisplayFor(modelItem => item.Price)*@
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PressYear)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StockCount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category.Name)
+                        </td>
+                        <td>
+                            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        </td>
+                    </tr>
+                }
+                }
+                if(Select1.Value=="3"){
+
+                @foreach (var item in Model.Results.OrderByDescending(i => i.Price))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PageCount)
+                        </td>
+                        <td>
+                            @item.Authors
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @item.Price
+                            @*@Html.DisplayFor(modelItem => item.Price)*@
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PressYear)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StockCount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category.Name)
+                        </td>
+                        <td>
+                            <a asp-controller="Books" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        </td>
+                    </tr>
+                }
+                }
+
+
+
             </tbody>
         </table>
     </div>
 }
-
